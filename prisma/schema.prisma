@@ -1,0 +1,44 @@
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Author {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  createdAt DateTime @default(now())
+
+  ownedNotes    Note[]
+  collaborating Collaborator[]
+}
+
+model Note {
+  id        String   @id @default(cuid())
+  heading   String   @default("Untitled Note")
+  body      Json     @default("{}")
+  authorId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  author        Author         @relation(fields: [authorId], references: [id])
+  collaborators Collaborator[]
+}
+
+model Collaborator {
+  id          String   @id @default(cuid())
+  noteId      String
+  authorId    String
+  accessLevel String   @default("writer")
+  createdAt   DateTime @default(now())
+
+  note   Note   @relation(fields: [noteId], references: [id], onDelete: Cascade)
+  author Author @relation(fields: [authorId], references: [id])
+
+  @@unique([noteId, authorId])
+}
