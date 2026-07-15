@@ -2,7 +2,7 @@
 
 A collaborative note-taking workspace built with Next.js, featuring rich text editing, file ingestion, and author-based collaboration.
 
-**Live Demo**: *(deploy URL here)*
+**Live Demo**: *https://inkwell-tau.vercel.app/*
 
 ---
 
